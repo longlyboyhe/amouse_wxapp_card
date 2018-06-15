@@ -1,0 +1,269 @@
+{template 'common/header'}
+<style>
+    .label-red {
+        background-color: red;
+    }
+</style>
+{if $operation == 'display'}
+<div class="main">
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选</div>
+        <div class="panel-body">
+            <form action="./index.php" method="get" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="amouse_wxapp_card" />
+                <input type="hidden" name="do" value="cards" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">联系方式</label>
+                    <div class="col-sm-2 col-lg-2">
+                        <input class="form-control" name="tel" id="" type="text" value="{$_GPC['tel']}">
+                    </div>
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">姓名</label>
+                    <div class="col-sm-2 col-lg-2">
+                        <input class="form-control" name="username"  type="text" value="{$_GPC['username']}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 col-lg-2">
+                        <button class="btn btn-default">
+                            <i class="fa fa-search"></i> 搜索</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        .page-nav {
+            margin: 0;
+            width: 100%;
+            min-width: 800px;
+        }
+
+        .page-nav > li > a {
+            display: block;
+        }
+
+        .page-nav-tabs {
+            background: #EEE;
+        }
+
+        .page-nav-tabs > li {
+            line-height: 40px;
+            float: left;
+            list-style: none;
+            display: block;
+            text-align: -webkit-match-parent;
+        }
+
+        .page-nav-tabs > li > a {
+            font-size: 14px;
+            color: #666;
+            height: 40px;
+            line-height: 40px;
+            padding: 0 10px;
+            margin: 0;
+            border: 1px solid transparent;
+            border-bottom-width: 0px;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+        }
+
+        .page-nav-tabs > li > a, .page-nav-tabs > li > a:focus {
+            border-radius: 0 !important;
+            background-color: #f9f9f9;
+            color: #999;
+            margin-right: -1px;
+            position: relative;
+            z-index: 11;
+            border-color: #c5d0dc;
+            text-decoration: none;
+        }
+
+        .page-nav-tabs >li >a:hover {
+            background-color: #FFF;
+        }
+
+        .page-nav-tabs > li.active > a, .page-nav-tabs > li.active > a:hover, .page-nav-tabs > li.active > a:focus {
+            color: #576373;
+            border-color: #c5d0dc;
+            border-top: 2px solid #4c8fbd;
+            border-bottom-color: transparent;
+            background-color: #FFF;
+            z-index: 12;
+            margin-top: -1px;
+            box-shadow: 0 -2px 3px 0 rgba(0, 0, 0, 0.15);
+        }
+    </style>
+
+    <div class="panel panel-default">
+        <form id="form2" class="form-horizontal" method="post">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th style="width:5%;">全选</th>
+                        <th>信息</th><th>微信号</th>
+                        <th>点赞</th> <th>浏览</th> <th>收藏</th>
+                        <th style="text-align:right;">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="row-first">
+                            <input type="checkbox"  onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});" name=''></td>
+                        <td colspan="8" style="text-align:left;">
+                            <input name="token" type="hidden" value="{$_W['token']}"/>
+                            <input type="submit" class="btn btn-primary" name="submit1" value="批量删除"/>
+                        </td>
+                    </tr>
+                    {loop $list $item}
+                    <tr>
+                        <td> <input type="checkbox" value="{$item['id']}" name="delete[]">  </td>
+                        <td>
+                            <img src="{$item['avater']}" style='width:30px;height:30px;padding:1px;border:1px solid #ccc' />{$item['username']}
+                            <br/>
+                            <label class='label label-primary'>{$item['mobile']} </label> <br/>
+                            <label class='label label-default'>邮箱:{$item['email']} {if $item['weixin']} | 微信：[{$item['weixin']}]{/if}</label> <br/>
+                        </td>
+                        <td>
+                            <img src="{php echo tomedia($item['weixinImg'])}" style='width:30px;height:30px;padding:1px;border:1px solid #ccc' />
+                        </td>
+                        <td  >
+                            {$item['zan']}
+                        </td>
+                        <td  >
+                           {$item['view']}
+                        </td>
+                        <td >
+                             {$item['collect']}
+                        </td>
+
+                        <td style="text-align:right;">
+                            <a href="{php echo $this->createWebUrl('cards', array('op' => 'detail', 'id' => $item['id']))}" title="详情" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="详情" >
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a href="{php echo $this->createWebUrl('cards', array('op' => 'clear', 'id' => $item['id']))}" title="详情" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="详情" >
+                                <i class="fa fa-eye">清除二维码</i>
+                            </a>
+                            <a onclick="return confirm('删除订单无法恢复，确认吗？');return false;"
+                               href="{php echo $this->createWebUrl('cards', array('op' => 'delete','id' => $item['id']))}" class="btn btn-default btn-sm"> <i class="fa fa-times"></i></a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+                {$pager}
+            </div>
+        </form>
+    </div>
+</div>
+{elseif $operation == 'detail'}
+<div class="main">
+    <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data"  onsubmit="return formcheck(this)">
+        <input type="hidden" name="id" value="{$item[id]}">
+        <input type="hidden" name="shopid" value="{$shopid}">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                名片信息
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">名片名称</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {$item['username']}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">email</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {$item['email']}
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">微信号</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {$item['weixin']}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">点赞</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {$item['zan']}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">查看</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {$item['view']}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">收藏</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {$item['collect']}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">公司</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {$item['company']}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">职位</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {$item['job']}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!--
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                用户信息
+            </div>
+
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">姓名</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {$item['guest_name']}（{if $item['sex']==1}先生{else}女士{/if}）
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">手机</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {$item['tel']}
+                    </div>
+                </div>
+                {if $item['order_type']==2}
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">桌号</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {$item['desk']}（人数：{$item['nums']}）
+                    </div>
+                </div>
+                {elseif $item['order_type']==1}
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">地址</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {$item['guest_address']}
+                    </div>
+                </div>
+                {/if}
+
+            </div>
+        </div> -->
+    </form>
+</div>
+{/if}
+{template 'common/footer'}

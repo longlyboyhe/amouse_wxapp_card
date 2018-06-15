@@ -1,0 +1,86 @@
+{template 'common/header'}
+<ul class="nav nav-tabs">
+	<li {if $operation == 'post'}class="active"{/if}><a href="{php echo $this->createWebUrl('slide', array('op' => 'post'))}">{if $id==0}添加幻灯片{else}修改幻灯片{/if}</a></li>
+	<li {if $operation == 'display'}class="active"{/if}><a href="{php echo $this->createWebUrl('slide', array('op' => 'display'))}">管理幻灯片</a></li>
+</ul>
+{if $operation == 'post'}
+<div class="main">
+    <form action="" method="post" class="form-horizontal form" id="form1">
+        <div class="panel panel-default">
+            <div class="panel-heading">幻灯片详细设置</div>
+            <div class="panel-body">
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">幻灯片名称</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="catename" class="form-control" value="{$slide['name']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">幻灯图片</label>
+                    <div class="col-sm-9 col-xs-12">
+                        {php echo tpl_form_field_image('thumb', $slide['thumb']);}
+                    </div>
+                </div>
+                <!--<div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">幻灯片外链</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="url" class="form-control" value="{$slide['url']}" />
+                    </div>
+                </div>-->
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12">
+                <input name="submit" type="submit" value="提交" class="btn btn-primary col-lg-1">
+                <input type="hidden" name="token" value="{$_W['token']}" />
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+
+</script>
+{elseif $operation == 'display'}
+<div class="main">
+	<div class="slide">
+		<form action="" method="post" onsubmit="return formcheck(this)">
+            <div class="panel panel-default">
+                <div class="panel-body table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width:10px;"></th>
+                            <th style="width:30px;">幻灯片图片</th>
+                            <th style="width:20px;" class="text-center">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {loop $slide $row}
+                        <tr>
+                            <td>{if count($children[$row['id']]) > 0}<a href="javascript:;"><i class="icon-chevron-down"></i></a>{/if}</td>
+                            <td>
+                                {if $row['thumb']}<img src="{php echo tomedia($row['thumb'])}" style='width:50px;height:50px;padding:1px;border:1px solid #ccc' />{/if}{$row['name']}
+                            </td>
+                            <td class="text-center">
+                                <a href="{php echo $this->createWebUrl('slide', array('op' => 'post', 'id' => $row['id']))}" title="编辑" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top"><i class="fa fa-edit"></i></a>
+                                <a href="{php echo $this->createWebUrl('slide', array('op' => 'delete','id' => $row['id']))}" onclick="return confirm('确认删除此幻灯片吗？');return false;" title="删除" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top"><i class="fa fa-times"></i></a>
+                            </td>
+                        </tr>
+                    {/loop}
+                        <tr>
+                            <td></td>
+                            <td colspan="4">
+                                <a href="{php echo $this->createWebUrl('slide', array('op' => 'post'))}"><i class="fa fa-plus"></i> 添加新幻灯片</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </form>
+	</div>
+</div>
+{/if}
+{template 'common/footer'}

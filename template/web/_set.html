@@ -1,0 +1,142 @@
+{template 'common/header'}
+<ul class="nav nav-tabs">
+    <li {if $op=='shopset'}class="active"{/if}><a href="{php echo $this->createWebUrl('sysset',array('op'=>'shopset'))}">系统基本设置</a></li>
+</ul>
+<div class="main">
+	<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
+	    <input type="hidden" name="id" value="{$set['id']}" />
+        <div class="panel panel-default">
+            <div class="panel-heading">系统基本设置</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 control-label">联系客服电话</label>
+                    <div class="col-sm-9 col-xs-9 col-md-7 col-xs-12">
+                        <input type="text" id="systel" name="systel"  class="form-control" value="{$set['systel']}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 control-label">版权</label>
+                    <div class="col-sm-9 col-xs-9 col-md-7 col-xs-12">
+                        <input type="text" id="copyright" name="copyright"  class="form-control" value="{$set['copyright']}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 control-label"><span class="require">*</span>是否短信验证手机号</label>
+                    <div class="col-sm-9 col-xs-9 col-md-7 col-xs-12">
+                        <label class="radio-inline"><input type="radio" onclick="sendtypeshow(0)" name="mobile_verify_status" value="0" {if $set['mobile_verify_status'] == 0|| $settle['mobile_verify_status']}checked{/if}>不验证</label>
+                        <label class="radio-inline"><input type="radio" onclick="sendtypeshow(1)" name="mobile_verify_status" value="1" {if $set['mobile_verify_status'] == 1 }checked{/if}>验证手机号</label>
+                        <div class="help-block">开启验证手机号,需要配置短信参数. </div>
+                    </div>
+                </div>
+                <div class="form-group model2">
+                    <label class="col-xs-12 col-sm-4 col-md-3 control-label">短信平台用户(Access Key ID)</label>
+                    <div class="col-sm-9 col-xs-9 col-md-7 col-xs-12">
+                        <input type="text" name="sms_user" class="form-control" value="{$set['sms_user']}"/>
+                        <p class="help-block">短信平台用户名</p>
+                    </div>
+                </div>
+                <div class="form-group model2">
+                    <label class="col-xs-12 col-sm-4 col-md-3 control-label">短信平台密码(Access Key Secret)</label>
+                    <div class="col-sm-9 col-xs-9 col-md-7 col-xs-12">
+                        <input type="text" name="sms_secret" class="form-control" value="{$set['sms_secret']}"/>
+                        <p class="help-block">短信平台密匙，用户API发送短信(支持短信宝)</p>
+                    </div>
+                </div>
+
+                <div class="form-group model2">
+                    <label class="col-xs-12 col-sm-4 col-md-3 control-label">阿里短信接口</label>
+                    <div class="col-sm-9 col-xs-9 col-md-7">
+                        <label for="sms_type2" class="radio-inline">
+                            <input type="radio" name="sms_type" value="1" id="sms_type2" {if $set['sms_type']==1}checked="true"{/if}/>新接口 (阿里云短信服务）
+                        </label>
+                        <label for="sms_type1" class="radio-inline">
+                            <input type="radio" name="sms_type" value="0" id="sms_type1" {if $set['sms_type']==0}checked="true"{/if}/>老接口 (阿里大于)
+                        </label>
+                        <p class="help-block">老接口填写的是 appkey secretKey，
+                            新接口为阿里云短信服务Access Key ID Access Key Secret</p>
+                    </div>
+                </div>
+
+                <div class="form-group model2">
+                    <label class="col-xs-12 col-sm-4 col-md-3 control-label">阿里大鱼短信签名</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="sms_free_sign_name" class="form-control" value="{$set['sms_free_sign_name']}"/>
+                        <p class="help-block">阿里云/短信服务-短信签名-签名名称</p>
+                        <strong class="text-danger"> 模板内容:  验证码${number}，您正进行身份验证，打死不告诉别人！</strong>
+                    </div>
+                </div>
+                <div class="form-group model2">
+                    <label class="col-xs-12 col-sm-4 col-md-3 control-label">注册短信模板Code</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="reg_sms_code" class="form-control" value="{$set['reg_sms_code']}"/>
+                        <p class="help-block">阿里云/短信服务-短信模版-模版CODE</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 control-label"><span class="require">*</span>是否开启客服</label>
+                    <div class="col-sm-9 col-xs-9 col-md-7 col-xs-12">
+                        <label class="radio-inline"><input type="radio"  name="enable" value="0" {if $set['enable'] == 0|| $set['enable']}checked{/if}>开启</label>
+                        <label class="radio-inline"><input type="radio"  name="enable" value="1" {if $set['enable'] == 1 }checked{/if}>关闭</label>
+                        <div class="help-block">小程序首页显示 </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 control-label"><span class="require">*</span>是否开启分享</label>
+                    <div class="col-sm-9 col-xs-9 col-md-7 col-xs-12">
+                        <label class="radio-inline">
+                            <input type="radio"  name="isshare" value="0" {if $set['isshare'] == 0|| $set['isshare']}checked{/if}>开启</label>
+                        <label class="radio-inline">
+                            <input type="radio"  name="isshare" value="1" {if $set['isshare'] == 1 }checked{/if}>关闭</label>
+                        <div class="help-block">小程序首页交换好友，审核的时候可以关闭 </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 control-label"><span class="require">*</span>是否开启生成图片</label>
+                    <div class="col-sm-9 col-xs-9 col-md-7 col-xs-12">
+                        <label class="radio-inline">
+                            <input type="radio"  name="iscreate" value="0" {if $set['iscreate']==0 || $set['iscreate']}checked{/if}>开启</label>
+                        <label class="radio-inline">
+                            <input type="radio"  name="iscreate" value="1" {if $set['iscreate']==1}checked{/if}>关闭</label>
+                        <div class="help-block">小程序首页生成图片分享好友，审核的时候可以关闭 </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 control-label">是否开启必须发布个人名片才能查看好友</label>
+
+                    <div class="col-sm-9 col-xs-9 col-md-7 col-xs-12">
+                        <label class="radio-inline"><input type="radio"   name="public_status" value="0" {if $set['public_status'] == 0|| $settle['public_status']}checked{/if}>是</label>
+                        <label class="radio-inline"><input type="radio"   name="public_status" value="1" {if $set['public_status'] == 1 }checked{/if}>否</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <input name="submit" type="submit" value="提交" class="btn btn-primary col-lg-1">
+                <input type="hidden" name="token" value="{$_W['token']}"/>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function sendtypeshow(sf) {
+        if (sf==0) {
+            $(".model2").hide();
+        } else {
+            $(".model2").show();
+        }
+    }
+    require(['jquery', 'util'], function ($, u) {
+        $(function () {
+            var mobile_verify_status = "{$set['mobile_verify_status']}";
+            if (mobile_verify_status ==0) {
+                $(".model2").hide();
+            } else {
+                $(".model2").show();
+            }
+        });
+    });
+</script>
+
